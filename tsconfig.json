@@ -1,0 +1,15 @@
+{
+	"compilerOptions": {
+		"allowJs": false,
+		"module": "ES2022",
+		"target": "ES2022",
+	},
+  "include": [
+    "src",
+    "src/.d.ts"
+  ],
+	"exclude": [
+		"node_modules",
+    "build",
+	]
+}
