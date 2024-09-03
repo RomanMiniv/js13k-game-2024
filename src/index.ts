@@ -1,1 +1,3 @@
-console.log("%cHello World!!!!", "background-color: blue; color: white; padding: 4px;");
+import Game from "./game/game";
+
+new Game(document.getElementById("root") as HTMLCanvasElement);
