@@ -12,7 +12,7 @@ export class Enemy extends TextObject {
 
   isBossMode: boolean;
   setBerserkMode(): void {
-    this.velocity = getRandomIntInclusive(10, 15);
+    // this.velocity = getRandomIntInclusive(10, 16);
     this.bombCount = getRandomIntInclusive(4, 8);
     this.bombRadius = 400;
   };
