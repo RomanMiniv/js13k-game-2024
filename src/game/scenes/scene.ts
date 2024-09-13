@@ -1,13 +1,15 @@
 export abstract class Scene {
   canvas: HTMLCanvasElement;
   ctx: CanvasRenderingContext2D;
-  finishCallback: () => void;
+  finishCallback: (data?: unknown) => void;
 
-  constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, finishCallback: () => void) {
+  constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, finishCallback: (data?: unknown) => void) {
     this.canvas = canvas;
     this.ctx = ctx;
     this.finishCallback = finishCallback;
+  }
 
+  init(): void {
     this.setEvents();
   }
 
@@ -15,7 +17,7 @@ export abstract class Scene {
 
   }
   deleteEvents(): void {
-    
+
   }
 
   staticUpdate(): void {
@@ -32,11 +34,11 @@ export abstract class Scene {
   }
 
   setBG(): void {
-    this.ctx.fillStyle = "#fff";
+    this.ctx.fillStyle = "#FFFFFA";
     this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
   }
 
   update(tFrame: number): void {
-
+    this.setBG();
   }
 }

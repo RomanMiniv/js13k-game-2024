@@ -1,82 +1,13 @@
-import { getRandomIntInclusive, setTimer } from "../utils";
-import { Scene } from "./scene";
+import { prisonBarsPath } from "../../../canvasAssets";
+import { getRandomIntInclusive, setTimer } from "../../utils";
+import { Lore } from "./lore";
+import { EStrorageNames, GameStorage } from "../../gameStorage";
 
-export class Intro extends Scene {
-  gameObjects = [];
-  gameObjectIndexesForSave = [];
+export class Intro extends Lore {
   bgGameObjects = [];
-
-  constructor(canvas: HTMLCanvasElement, ctx: CanvasRenderingContext2D, finishCallback: () => void) {
-    super(canvas, ctx, finishCallback);
-    this.init();
-  }
-
-  init(): void {
-    this.steps[this.currentStep]();
-  }
-
-  setEvents(): void {
-    this.keydownHandler = this.keydownHandler.bind(this)
-    document.addEventListener("keydown", this.keydownHandler);
-  }
-
-  deleteEvents(): void {
-    document.removeEventListener("keydown", this.keydownHandler);
-  }
-
-  keydownHandler(e: KeyboardEvent): void {
-    if (e.code === "Enter" || e.code === "Space") {
-      if (!this.isSkip) {
-        return;
-      }
-      this.isSkip = false;
-
-      if (this.isLastStep()) {
-        this.deleteEvents();
-        this.finishCallback();
-        return;
-      }
-
-      const gameObjects = [];
-      this.gameObjectIndexesForSave.forEach(gameObjectIndex => {
-        gameObjects.push(this.gameObjects[gameObjectIndex]);
-      })
-      this.gameObjects = [...gameObjects];
-
-      this.gameObjectIndexesForSave = [];
-      for (let i = 0; i < gameObjects.length; i++) {
-        this.gameObjectIndexesForSave.push(i);
-      }
-
-      this.currentStep++;
-      this.steps[this.currentStep]();
-    }
-  }
-
-  isLastStep(): boolean {
-    return this.currentStep === this.steps.length - 1;
-  }
-
-  setMask(): void {
-    this.ctx.clip(new Path2D(`M0,50 h${this.canvas.width} v${this.canvas.height - 100} h-${this.canvas.width} z`));
-  }
-
-  currentStep: number = 0;
 
   fly: boolean = false;
   step: number = 0;
-
-  async waitSkip(time: number) {
-    await setTimer(time);
-    this.isSkip = true;
-  }
-
-  getCenterPos() {
-    return {
-      cX: this.canvas.width / 2,
-      cY: this.canvas.height / 2.5,
-    }
-  }
 
   offsetVisibleZone: number = 200;
   isNotVisible(x: number, y: number): boolean {
@@ -202,15 +133,14 @@ export class Intro extends Scene {
         this.setStoryText("everything was in harmony");
       });
 
-      const emojis = ["(* ^ ω ^)", "(*￣▽￣)b", "ヽ(・∀・)ﾉ", "╰(▔∀▔)╯", "(─‿‿─)", "<(￣︶￣)>", "☆*:.｡.o(≧▽≦)o.｡.:*☆", "٩(◕‿◕｡)۶", "(￣ω￣)", "( • ⩊ • )", "(≧◡≦)", "\\(★ω★)/", "°˖✧◝(⁰▿⁰)◜✧˖°", "٩(｡•́‿•̀｡)۶", "⸜( *ˊᵕˋ* )⸝", "(￣▽￣*)ゞ", "(ง ื▿ ื)ว"];
-      for (let i = 0; i < emojis.length; i++) {
+      for (let i = 0; i < this.positiveEmojis.length; i++) {
         const fontSize: number = 16;
         const x = getRandomIntInclusive(fontSize, this.canvas.width - fontSize);
         const y = getRandomIntInclusive(fontSize + 50, this.canvas.height - fontSize - 50);
         this.bgGameObjects.push(() => {
           this.ctx.fillStyle = "#36454F";
           this.ctx.font = `bold ${fontSize}px Courier New`;
-          this.ctx.fillText(emojis[i], x, y);
+          this.ctx.fillText(this.positiveEmojis[i], x, y);
         });
       }
 
@@ -242,12 +172,6 @@ export class Intro extends Scene {
       await setTimer(1000);
       isShake = false;
     },
-
-    // async () => {
-    //   this.setStoryText("13 wanted strength, he found followers");
-    //   // * підсвітити ранодомно ще червоним кольором приспішників 13 (мб ще до нього підтянути)
-    //   await setTimer(2000);
-    // },
     async () => {
       let radius = 150;
 
@@ -273,7 +197,7 @@ export class Intro extends Scene {
                 return;
               }
 
-              const prisonBars = new Path2D(`M${x},${y} h75 m0,50 h-75 m7.5,0 v-50 m15,0 v50 m15,0 v-50 m15,0 v50 m15,0 v-50`);
+              const prisonBars = prisonBarsPath(x, y);
               this.ctx.lineWidth = 2;
               this.ctx.stroke(prisonBars);
             });
@@ -303,7 +227,7 @@ export class Intro extends Scene {
       this.gameObjects.push(() => {
         this.setStoryText("0 lost his power and was unable to stop 13");
       });
-      // * якось відобразити це?
+      
       this.waitSkip(1000);
     },
     async () => {
@@ -329,15 +253,14 @@ export class Intro extends Scene {
 
       this.bgGameObjects = [];
 
-      const emojis = ["┌∩┐(◣_◢)┌∩┐", "Σ(▼□▼メ", "٩(╬ʘ益ʘ╬)۶", "(ﾉಥ益ಥ)ﾉ", "(｡•́︿•̀｡)", "(っ˘̩╭╮˘̩)っ", "(︶︹︺)", "←~(Ψ▼ｰ▼)∈", "ヾ(`ヘ´)ﾉﾞ", "(・`ω´・)", "(҂ `з´ )", "↑_(ΦwΦ)Ψ", "୧((#Φ益Φ#))୨", "ψ( ` ∇ ´ )ψ", "(ಥ﹏ಥ)", "＼(º □ º l|l)/", "(っ•﹏•)っ ✴==≡눈٩(`皿´҂)ง"];
-      for (let i = 0; i < emojis.length; i++) {
+      for (let i = 0; i < this.negativeEmojis.length; i++) {
         const fontSize: number = 16;
         const x = getRandomIntInclusive(fontSize, this.canvas.width - fontSize);
         const y = getRandomIntInclusive(fontSize + 50, this.canvas.height - fontSize - 50);
         this.bgGameObjects.push(() => {
           this.ctx.fillStyle = "#36454F";
           this.ctx.font = `bold ${fontSize}px Courier New`;
-          this.ctx.fillText(emojis[i], x, y);
+          this.ctx.fillText(this.negativeEmojis[i], x, y);
         });
         this.gameObjectIndexesForSave.push(this.gameObjects.length - 1);
       }
@@ -346,36 +269,20 @@ export class Intro extends Scene {
     },
   ];
 
-  setBG(): void {
-    this.ctx.fillStyle = "#FFFFFA";
-    this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
-  }
-
-  setStoryText(text: string): void {
-    this.ctx.font = "bold 24px Courier New";
-    this.ctx.fillStyle = "#36454F";
-    this.ctx.fillText(text, this.canvas.width / 2, this.canvas.height - this.canvas.height / 4);
-
-    this.setSkipText();
-  }
-
-  isSkip: boolean = false;
-  setSkipText(): void {
-    if (this.isSkip) {
-      this.ctx.font = "bold 24px Courier New";
-      this.ctx.fillStyle = "#e6b800";
-      this.ctx.fillText("[Press Space or Enter to skip]", this.canvas.width / 2, this.canvas.height - this.canvas.height / 4 + 48);
-    }
-  }
-
   update(tFrame: number): void {
-    this.setBG();
+    super.update(tFrame);
 
     this.bgGameObjects.forEach(gameObject => gameObject());
     this.gameObjects.forEach(gameObject => gameObject());
 
     if (this.fly && this.step <= 1000) {
       this.step += 3;
+    }
+  }
+
+  setSkipAllText(): void {
+    if (+GameStorage.GET_DATA(EStrorageNames.LORE) > 0) {
+      super.setSkipAllText();
     }
   }
 }
