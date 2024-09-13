@@ -98,7 +98,7 @@ export class Outro extends Lore {
     },
     async () => {
       this.gameObjects.push(() => {
-        this.setStoryText("everything was in harmony");
+        this.setStoryText("everything was in harmony again");
       });
 
       for (let i = 0; i < this.positiveEmojis.length; i++) {

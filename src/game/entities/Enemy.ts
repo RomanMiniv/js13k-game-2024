@@ -36,10 +36,22 @@ export class Enemy extends TextObject {
     this.bombs.forEach(bomb => bomb.render());
   }
 
+  isDead: boolean;
+  
   draw(): void {
     this.ctx.fillStyle = "#CA2C92";
     this.setFontStyle();
     this.ctx.fillText(this.content, this.x, this.y);
+
+    if (this.isDead) {
+      this.ctx.save();
+      this.ctx.strokeStyle = "#36454F";
+      const { left, top, width, height } = this.getHitArea();
+      const dead = new Path2D(`M${left},${top} l${width},${height} m0,${-height} l${-width},${height}`);
+      this.ctx.lineWidth = 4;
+      this.ctx.stroke(dead);
+      this.ctx.restore();
+    }
   }
 
   isMoveStop: boolean = true;

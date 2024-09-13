@@ -88,6 +88,7 @@ export class World extends Scene {
     this.isStopRender = true;
     this.player.isStopRender = true;
     this.player.isDead = !isWin;
+    this.enemy.isDead = isWin;
     this.enemy.isStopRender = true;
 
     await setTimer(2000);
