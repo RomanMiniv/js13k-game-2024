@@ -49,6 +49,8 @@ The game does not contain any graphics assets such as pictures, sprites, etc. In
 
 Unfortunately, I did not have time to add music.
 
+There were also many ideas that I wanted to implement, but time makes its adjustments :). However, I am glad that I was able to implement the main idea of ​​the game.
+
 In summary, the output contains 2 files - index.html and bundle.js, without any third-party assets and more than 3KB in reserve, which, in my opinion, is quite a good result!
 
 I hope you had fun playing my game!
