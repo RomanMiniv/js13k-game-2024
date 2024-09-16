@@ -45,7 +45,9 @@ Since each step is an async function, in it I can work with Promises to add obje
 
 The game does not contain any graphics assets such as pictures, sprites, etc. Instead, all the necessary objects are drawn on the canvas. I've had some experience with hand-drawn SVG graphics, so the Path2D canvas worked well for me, allowing me to draw the way SVG is drawn. Also, its syntax is shorter in contrast to the classical one due to the construction of the path, which makes it possible to save a little size. In addition, using Path2D, you can further go from it to classic path construction functions, such as arc() or lineTo(), etc thereby combining it.
 
-Unfortunately, there was not enough time for music.
+Unfortunately, I did not have time to add music.
+
+There were also many ideas that I wanted to implement, but time makes its adjustments :). However, I am glad that I was able to implement the main idea of ​​the game.
 
 In summary, the output contains 2 files - index.html and bundle.js, without any third-party assets and more than 3KB in reserve, which, in my opinion, is quite a good result!
 
